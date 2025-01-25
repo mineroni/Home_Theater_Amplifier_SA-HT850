@@ -91,8 +91,6 @@ void setup()
   irrecv.setTolerance(kTolerancePercentage);  // Override the default tolerance.
   irrecv.enableIRIn();  // Start the receiver
 
-  return;
-
   //Setting up WiFi
   WiFi.begin(WIFI_SSID, WIFI_PASSWD);
 
@@ -100,7 +98,8 @@ void setup()
   {
     Serial.println("Connection Failed! Rebooting...");
     delay(5000);
-    ESP.restart();
+    return;
+    //ESP.restart();
   }
 
   ArduinoOTA.begin();
@@ -132,13 +131,9 @@ void loop()
     String description = IRAcUtils::resultAcToString(&results);
     if (description.length()) Serial.println(D_STR_MESGDESC ": " + description);
     yield();  // Feed the WDT as the text output can take a while to print.
-#if LEGACY_TIMING_INFO
-    // Output legacy RAW timing info of the result.
-    Serial.println(resultToTimingInfo(&results));
-    yield();  // Feed the WDT (again)
-#endif  // LEGACY_TIMING_INFO
     // Output the results as source code
     Serial.println(resultToSourceCode(&results));
     Serial.println();    // Blank line between entries
     yield();             // Feed the WDT (again)
+  }
 }
