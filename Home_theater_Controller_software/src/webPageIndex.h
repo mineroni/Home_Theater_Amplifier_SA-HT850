@@ -1,5 +1,5 @@
-#ifndef WEBPAGES_H
-#define WEBPAGES_H
+#ifndef WEBPAGEINDEX_H
+#define WEBPAGEINDEX_H
 
 // index.html page constant serve
 const char * indexPage = R"rawliteral(
@@ -125,10 +125,14 @@ const char * indexPage = R"rawliteral(
             .catch(console.error);
         }
 
+        document.getElementById('advancedSettingsBtn').addEventListener('click', () => {
+            window.location.href = '/advanced';
+        });
+
         setInterval(fetchValues, 500);
         fetchValues();
     </script>
 </body>
 )rawliteral";
 
-#endif // WEBPAGES_H
+#endif // WEBPAGEINDEX_H

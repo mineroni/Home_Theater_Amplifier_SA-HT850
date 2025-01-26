@@ -120,6 +120,10 @@
             .catch(console.error);
         }
 
+        document.getElementById('advancedSettingsBtn').addEventListener('click', () => {
+            window.location.href = '/advanced';
+        });
+
         setInterval(fetchValues, 500);
         fetchValues();
     </script>
