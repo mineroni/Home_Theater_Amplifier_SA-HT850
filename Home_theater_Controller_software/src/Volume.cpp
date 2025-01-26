@@ -33,19 +33,19 @@ uint8_t Volume::getVolume()
 uint8_t Volume::getSurroundVolume()
 {
     if (muted) return 0;
-    return (-offsets[SURROUND] > volume) ? 0 : volume + offsets[SURROUND];
+    return (-offsets[SURROUND] > volume) ? 0 : (volume + offsets[SURROUND] > 100 ? 100 : volume + offsets[SURROUND]);
 }
 
 uint8_t Volume::getSubVolume()
 {
     if (muted) return 0;
-    return (-offsets[SUBWOOFER] > volume) ? 0 : volume + offsets[SUBWOOFER];
+    return (-offsets[SUBWOOFER] > volume) ? 0 : (volume + offsets[SUBWOOFER] > 100 ? 100 : volume + offsets[SUBWOOFER]);
 }
 
 uint8_t Volume::getCenterVolume()
 {
     if (muted) return 0;
-    return (-offsets[CENTER] > volume) ? 0 : volume + offsets[CENTER];
+    return (-offsets[CENTER] > volume) ? 0 : (volume + offsets[CENTER] > 100 ? 100 : volume + offsets[CENTER]);
 }
 
 int8_t* Volume::getOffsets()
