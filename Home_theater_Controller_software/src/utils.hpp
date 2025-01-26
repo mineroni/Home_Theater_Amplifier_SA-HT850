@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include <Arduino.h>
+#include <EEPROM.h>
 #include "main.h"
 
 inline void initSerial()
@@ -51,6 +52,14 @@ inline size_t Print(T str)
   #else
   return 0;
   #endif
+}
+
+inline void EEPROMUpdate(uint8_t address, uint8_t value)
+{
+  if(EEPROM.read(address) != value)
+  {
+    EEPROM.write(address, value);
+  } 
 }
 
 #endif // UTILS_H

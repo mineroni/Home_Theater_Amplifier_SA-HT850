@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 #define VolumeMax               (100)
-#define MaxOffset               (20)
+#define MaxOffset               (10)
 
 class Volume
 {
@@ -39,7 +39,7 @@ class Volume
         // Internal fields
         uint8_t volume;
         bool muted;
-        int8_t offsets[ChannelIDCount];
+        int8_t offsets[ChannelIDCount];   
 };
 
 #endif

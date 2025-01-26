@@ -1,16 +1,27 @@
 #include <Arduino.h>
+#include <EEPROM.h>
 
 #include "Volume.h"
 #include "utils.hpp"
 
 Volume::Volume()
 {
-    volume = 0;
-    muted = false;
-    for(uint8_t i = 0; i < ChannelIDCount; i++)
+    // Starting EEPROM
+    EEPROM.begin(ChannelIDCount);
+    
+    // Reading EEPROM values to initialize volume and offsets
+    volume = EEPROM.read(FRONT);
+    // If value is invalid, set it to 0
+    if (volume > VolumeMax)
+        volume = 0;
+    for(uint8_t i = 1; i < ChannelIDCount; i++)
     {
-        offsets[i] = 0;
+        offsets[i] = EEPROM.read(i);
+        // If value is invalid, set it to 0
+        if (offsets[i] > MaxOffset || offsets[i] < -MaxOffset)
+            offsets[i] = 0;
     }
+    muted = false;
 }
 
 uint8_t Volume::getVolume()
@@ -55,6 +66,8 @@ void Volume::changeVolume(int8_t change)
     {
         volume = VolumeMax;
     }
+    EEPROMUpdate(FRONT, volume);
+    EEPROM.commit();
 }
 
 void Volume::changeSurroundOffset(int8_t change)
@@ -68,6 +81,8 @@ void Volume::changeSurroundOffset(int8_t change)
     {
         offsets[SURROUND] = -MaxOffset;
     }
+    EEPROMUpdate(SURROUND, offsets[SURROUND]);
+    EEPROM.commit();
 }
 
 void Volume::changeSubOffset(int8_t change)
@@ -81,6 +96,8 @@ void Volume::changeSubOffset(int8_t change)
     {
         offsets[SUBWOOFER] = -MaxOffset;
     }
+    EEPROMUpdate(SUBWOOFER, offsets[SUBWOOFER]);
+    EEPROM.commit();
 }
 
 void Volume::changeCenterOffset(int8_t change)
@@ -94,6 +111,8 @@ void Volume::changeCenterOffset(int8_t change)
     {
         offsets[CENTER] = -MaxOffset;
     }
+    EEPROMUpdate(CENTER, offsets[CENTER]);
+    EEPROM.commit();
 }
 
 void Volume::mute()
@@ -106,7 +125,9 @@ void Volume::resetOffsets()
     for(uint8_t i = 0; i < ChannelIDCount; i++)
     {
         offsets[i] = 0;
+        EEPROMUpdate(i, 0);
     }
+    EEPROM.commit();
 }
 
 void Volume::printVolumeStatus()
