@@ -115,6 +115,11 @@ void Volume::changeCenterOffset(int8_t change)
     EEPROM.commit();
 }
 
+bool Volume::isMuted()
+{
+    return muted;
+}
+
 void Volume::mute()
 {
     muted = !muted;

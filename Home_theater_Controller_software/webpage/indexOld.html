@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5.1 Volume Controller</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #volumeBar {
+            width: 70%;
+            height: 30px;
+            background: #007bff;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        #volumeFill {
+            height: 100%;
+            background: #00d4ff;
+            border-radius: 15px;
+            width: 50%; /* Default to 50% for volume 50 */
+        }
+
+        #volumeText {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ffcc00;
+        }
+
+        #mutedStatus {
+            color: red;
+            visibility: hidden;
+            font-size: 1.5rem;
+            position: absolute;
+            right: 0;
+            bottom: -60px; /* Increased space below */
+            margin-top: 10px; /* Added space above */
+        }
+    </style>
+</head>
+<body class="bg-dark text-light">
+    <div class="container text-center py-5">
+        <h1 class="mb-4">5.1 Sound System Volume Controller</h1>
+
+        <div id="volumeText">Volume: 50%</div>
+        
+        <!-- Volume Bar Container -->
+        <div id="volumeBarContainer" class="d-flex justify-content-center gap-3 mb-3">
+            <div id="volumeBar">
+                <div id="volumeFill"></div>
+                <h4 id="mutedStatus">Muted</h4>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3 mb-3">
+            <button id="volumeDownBtn" class="btn btn-secondary">Volume Down</button>
+            <button id="volumeUpBtn" class="btn btn-secondary">Volume Up</button>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3">
+            <button id="muteBtn" class="btn btn-warning">Mute</button>
+            <button id="advancedSettingsBtn" class="btn btn-primary">Advanced Settings</button>
+        </div>
+    </div>
+
+    <script>
+        const volumeBar = document.getElementById('volumeBar');
+        const volumeFill = document.getElementById('volumeFill');
+        const volumeText = document.getElementById('volumeText');
+        const mutedStatus = document.getElementById('mutedStatus');
+        const muteBtn = document.getElementById('muteBtn');
+        let isMuted = false;
+        let currentVolume = 50;
+
+        function updateVolumeFill(volume) {
+            volumeFill.style.width = `${volume}%`;
+            volumeText.textContent = `Volume: ${volume}%`;
+        }
+
+        muteBtn.addEventListener('click', () => {
+            isMuted = !isMuted;
+            mutedStatus.style.visibility = isMuted ? 'visible' : 'hidden';
+        });
+
+        document.getElementById('volumeDownBtn').addEventListener('click', () => {
+            if (!isMuted && currentVolume > 0) {
+                currentVolume -= 5;
+                updateVolumeFill(currentVolume);
+            }
+            else if (isMuted) {
+                muteBtn.click();
+            }
+        });
+
+        document.getElementById('volumeUpBtn').addEventListener('click', () => {
+            if (!isMuted && currentVolume < 100) {
+                currentVolume += 5;
+                updateVolumeFill(currentVolume);
+            }
+            else if (isMuted) {
+                muteBtn.click();
+            }
+        });
+
+        function fetchValues() {
+            fetch('/get-status') // Replace with actual microcontroller endpoint
+                .then(response => response.json())
+                .then(data => {
+                    if (!isMuted) {
+                        currentVolume = data.volume;
+                        updateVolumeFill(data.volume);
+                    }
+                    isMuted = data.muted;
+                    mutedStatus.style.visibility = isMuted ? 'visible' : 'hidden';
+                })
+                .catch(console.error);
+        }
+
+        setInterval(fetchValues, 2000);
+        fetchValues();
+    </script>
+</body>

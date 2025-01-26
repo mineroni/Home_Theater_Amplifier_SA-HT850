@@ -26,6 +26,7 @@ class Volume
         uint8_t getSubVolume();
         uint8_t getCenterVolume();
         int8_t* getOffsets();
+        bool isMuted();
 
         // Setters
         void changeVolume(int8_t change);

@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <ArduinoOTA.h>
+#include <ESP8266WebServer.h>
 
 #include "main.h"
 
@@ -7,12 +8,15 @@
 #include "utils.hpp"
 #include "IR.hpp"
 #include "Volume.h"
+#include "webServer.h"
 
 unsigned long lastIRTime;
 void handleIRCommand();
 Volume volume;
 bool changeVolumeNeeded;
 decode_results results;  // Storing the results
+// Create an instance of the web server on port 80
+ESP8266WebServer server(80);
 
 void setup() 
 {
@@ -39,6 +43,10 @@ void setup()
   ArduinoOTA.begin();
   ArduinoOTA.setHostname("Home-Theater System");
   ArduinoOTA.setPassword("Ronald6.");
+
+  // Setting up web server
+  setupWebServer();
+
   Println("Ready");
   Print("IP address: ");
   Println(WiFi.localIP());
@@ -52,6 +60,8 @@ void setup()
 void loop() 
 {
   handleIRCommand();
+
+  server.handleClient();
 
   if(changeVolumeNeeded)
   {
