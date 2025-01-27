@@ -6,10 +6,10 @@
 
 #include "secrets.h"
 #include "utils.hpp"
-#include "IR\IR.hpp"
-#include "VolumeController\Volume.h"
-#include "Webserver\webServer.h"
-#include "DigitalPotDriver\MCP42010.h"
+#include "IR/IR.hpp"
+#include "VolumeController/Volume.h"
+#include "Webserver/webServer.h"
+#include "DigitalPotDriver/MCP42010.h"
 
 unsigned long lastIRTime;
 void handleIRCommand();

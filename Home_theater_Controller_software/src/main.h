@@ -4,8 +4,8 @@
 #include <Arduino.h>
 #include <IRutils.h>
 
-#include "VolumeController\Volume.h"
-#include "DigitalPotDriver\MCP42010.h"
+#include "VolumeController/Volume.h"
+#include "DigitalPotDriver/MCP42010.h"
 
 #define DEBUG
 

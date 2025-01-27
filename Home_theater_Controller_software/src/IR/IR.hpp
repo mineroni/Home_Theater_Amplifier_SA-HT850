@@ -10,8 +10,8 @@
 #include <IRtext.h>
 #include <IRutils.h>
 
-#include "..\main.h"
-#include "..\utils.hpp"
+#include "../main.h"
+#include "../utils.hpp"
 #include "IRCommands.h"
 
 // Output commands
