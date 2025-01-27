@@ -4,14 +4,27 @@
 #include <Arduino.h>
 #include <IRutils.h>
 
+#include "VolumeController\Volume.h"
+#include "DigitalPotDriver\MCP42010.h"
+
 #define DEBUG
 
+
+// ======================== Defining output pins =======================
+
+const uint8_t CS0 = 4;
+const uint8_t CS1 = 0;
+const uint8_t CS2 = 2;
+
 // ==================== start of TUNEABLE PARAMETERS ====================
-const uint8_t volumeChangeStep = 5;  // Volume change step
+// IR Volume change step
+const uint8_t volumeChangeStep = 5;
 
-const uint16_t captureDelayIR = 200;  // Delay in ms between IR captures
+// Delay in ms between IR captures
+const uint16_t captureDelayIR = 200;
 
-const uint16_t kRecvPin = 14;
+// IR receiver pin
+const uint16_t kRecvPin = 16;
 
 // As this program is a special purpose capture/decoder, let us use a larger
 // than normal buffer so we can handle Air Conditioner remote codes.
@@ -73,5 +86,19 @@ const uint8_t kTolerancePercentage = kTolerance;  // kTolerance is normally 25%
 // ==================== end of TUNEABLE PARAMETERS ====================
 
 extern decode_results results;  // Storing the results
+
+extern Volume volume;
+extern MCP42010 frontVolume;
+extern MCP42010 surroundVolume;
+extern MCP42010 subCentVolume;
+
+
+inline void setAllVolumeLevel()
+{
+    frontVolume.setWiper(MCP42010::WriteDeviceSelect::BothCh, volume.getVolume());
+    surroundVolume.setWiper(MCP42010::WriteDeviceSelect::BothCh, volume.getSurroundVolume());
+    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch0, volume.getSubVolume());
+    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch1, volume.getCenterVolume());
+}
 
 #endif // MAIN_H

@@ -9,22 +9,24 @@
 #include "IR\IR.hpp"
 #include "VolumeController\Volume.h"
 #include "Webserver\webServer.h"
+#include "DigitalPotDriver\MCP42010.h"
 
 unsigned long lastIRTime;
 void handleIRCommand();
 Volume volume;
-bool changeVolumeNeeded;
 decode_results results;  // Storing the results
 // Create an instance of the web server on port 80
 ESP8266WebServer server(80);
+// Creating channel control potmeters
+MCP42010 frontVolume(CS0, SCK, MOSI);
+MCP42010 surroundVolume(CS1, SCK, MOSI);
+MCP42010 subCentVolume(CS2, SCK, MOSI);
 
 void setup() 
 {
   // Initializing Serial port
   initSerial();
   Println("\nBooting...");
-
-  // TODO: Setting volume to 0
 
   // Initializing IR
   initIR();
@@ -36,7 +38,6 @@ void setup()
     Println("Connection Failed! Rebooting...");
     delay(5000);
     return;
-    //ESP.restart();
   }
 
   // Setting up OTA
@@ -51,10 +52,10 @@ void setup()
   Print("IP address: ");
   Println(WiFi.localIP());
 
-  // TODO: Setting volume level as needed
+  // Setting initial volume level
+  setAllVolumeLevel();
 
   lastIRTime = millis();
-  changeVolumeNeeded = false;
 }
 
 void loop() 
@@ -62,12 +63,6 @@ void loop()
   handleIRCommand();
 
   server.handleClient();
-
-  if(changeVolumeNeeded)
-  {
-    changeVolumeNeeded = false;
-    // TODO: Setting changed volume
-  }
 
   yield();
 }
@@ -85,25 +80,25 @@ void handleIRCommand()
     case IR_Mute:
       Println("Mute");
       lastIRTime = millis();
-      changeVolumeNeeded = true;
       volume.mute();
       volume.printVolumeStatus();
+      setAllVolumeLevel();
       break;
 
     case IR_VolumeUp:
       Println("Volume Up");
       lastIRTime = millis();
-      changeVolumeNeeded = true;
       volume.changeVolume(volumeChangeStep);
       volume.printVolumeStatus();
+      setAllVolumeLevel();
       break;
 
     case IR_VolumeDown:
       Println("Volume Down");
       lastIRTime = millis();
-      changeVolumeNeeded = true;
       volume.changeVolume(-volumeChangeStep);
       volume.printVolumeStatus();
+      setAllVolumeLevel();
       break;
 
     case IR_Source:
@@ -117,7 +112,7 @@ void handleIRCommand()
       Print(resultToSourceCode(&results));
       break;
 
-    default:
+    default: // Probably IR_NOOP
       break;
   }  
 }

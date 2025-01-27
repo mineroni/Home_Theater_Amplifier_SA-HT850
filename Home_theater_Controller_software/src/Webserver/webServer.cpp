@@ -1,9 +1,11 @@
 #include <ESP8266WebServer.h>
 
+#include "webServer.h"
 #include "webPageIndex.h"
 #include "webPageAdvanced.h"
 #include "..\VolumeController\Volume.h"
 #include "..\utils.hpp"
+#include "..\main.h"
 
 extern Volume volume;
 extern ESP8266WebServer server;
@@ -34,6 +36,7 @@ void handleAddVolume() {
         volume.changeVolume(server.arg("level").toInt());
     }
     volume.printVolumeStatus();
+    setAllVolumeLevel();
     server.send(200, "application/json", generateResponseMessage());
 }
 
@@ -43,6 +46,7 @@ void handleAddOffsetSurround() {
         volume.changeSurroundOffset(server.arg("offset").toInt());
     }
     volume.printVolumeStatus();
+    surroundVolume.setWiper(MCP42010::WriteDeviceSelect::BothCh, volume.getSurroundVolume());
     server.send(200, "application/json", generateResponseMessage());
 }
 
@@ -52,6 +56,7 @@ void handleAddOffsetSubwoofer() {
         volume.changeSubOffset(server.arg("offset").toInt());
     }
     volume.printVolumeStatus();
+    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch0, volume.getSubVolume());
     server.send(200, "application/json", generateResponseMessage());
 }
 
@@ -61,6 +66,7 @@ void handleAddOffsetCenter() {
         volume.changeCenterOffset(server.arg("offset").toInt());
     }
     volume.printVolumeStatus();
+    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch1, volume.getSubVolume());
     server.send(200, "application/json", generateResponseMessage());
 }
 
@@ -68,6 +74,7 @@ void handleAddOffsetCenter() {
 void handleMute() {
     volume.mute();
     volume.printVolumeStatus();
+    setAllVolumeLevel();
     server.send(200, "application/json", generateResponseMessage());
 }
 
