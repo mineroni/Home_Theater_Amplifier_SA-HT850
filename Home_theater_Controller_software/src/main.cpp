@@ -18,9 +18,9 @@ decode_results results;  // Storing the results
 // Create an instance of the web server on port 80
 ESP8266WebServer server(80);
 // Creating channel control potmeters
-MCP42010 frontVolume(CS0, SCK, MOSI);
-MCP42010 surroundVolume(CS1, SCK, MOSI);
-MCP42010 subCentVolume(CS2, SCK, MOSI);
+MCP42010 frontVolume(SPI_CS0, SPI_SCK, SPI_MOSI);
+MCP42010 surroundVolume(SPI_CS1, SPI_SCK, SPI_MOSI);
+MCP42010 subCentVolume(SPI_CS2, SPI_SCK, SPI_MOSI);
 
 void setup() 
 {
@@ -37,7 +37,7 @@ void setup()
   {
     Println("Connection Failed! Rebooting...");
     delay(5000);
-    return;
+    ESP.restart();
   }
 
   // Setting up OTA

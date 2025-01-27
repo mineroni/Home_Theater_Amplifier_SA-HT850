@@ -12,9 +12,11 @@
 
 // ======================== Defining output pins =======================
 
-const uint8_t CS0 = 4;
-const uint8_t CS1 = 0;
-const uint8_t CS2 = 2;
+const uint8_t SPI_SCK = 5;
+const uint8_t SPI_MOSI = 4;
+const uint8_t SPI_CS0 = 12;
+const uint8_t SPI_CS1 = 13;
+const uint8_t SPI_CS2 = 15;
 
 // ==================== start of TUNEABLE PARAMETERS ====================
 // IR Volume change step
@@ -24,7 +26,7 @@ const uint8_t volumeChangeStep = 5;
 const uint16_t captureDelayIR = 200;
 
 // IR receiver pin
-const uint16_t kRecvPin = 16;
+const uint16_t kRecvPin = 14;
 
 // As this program is a special purpose capture/decoder, let us use a larger
 // than normal buffer so we can handle Air Conditioner remote codes.
@@ -95,10 +97,10 @@ extern MCP42010 subCentVolume;
 
 inline void setAllVolumeLevel()
 {
-    frontVolume.setWiper(MCP42010::WriteDeviceSelect::BothCh, volume.getVolume());
-    surroundVolume.setWiper(MCP42010::WriteDeviceSelect::BothCh, volume.getSurroundVolume());
-    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch0, volume.getSubVolume());
-    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch1, volume.getCenterVolume());
+    frontVolume.setWiper(MCP42010::WriteDeviceSelect::BothCh, volume.getVolume()*255/100);
+    surroundVolume.setWiper(MCP42010::WriteDeviceSelect::BothCh, volume.getSurroundVolume()*255/100);
+    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch0, volume.getSubVolume()*255/100);
+    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch1, volume.getCenterVolume()*255/100);
 }
 
 #endif // MAIN_H
