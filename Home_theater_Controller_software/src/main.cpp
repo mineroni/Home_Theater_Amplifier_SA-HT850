@@ -6,9 +6,9 @@
 
 #include "secrets.h"
 #include "utils.hpp"
-#include "IR.hpp"
-#include "Volume.h"
-#include "webServer.h"
+#include "IR\IR.hpp"
+#include "VolumeController\Volume.h"
+#include "Webserver\webServer.h"
 
 unsigned long lastIRTime;
 void handleIRCommand();

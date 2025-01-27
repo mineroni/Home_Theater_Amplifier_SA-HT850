@@ -2,8 +2,8 @@
 
 #include "webPageIndex.h"
 #include "webPageAdvanced.h"
-#include "Volume.h"
-#include "utils.hpp"
+#include "..\VolumeController\Volume.h"
+#include "..\utils.hpp"
 
 extern Volume volume;
 extern ESP8266WebServer server;
