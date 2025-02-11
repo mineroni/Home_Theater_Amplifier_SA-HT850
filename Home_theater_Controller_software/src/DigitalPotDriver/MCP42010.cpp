@@ -30,9 +30,14 @@ void MCP42010::SPIWrite(uint8_t data)
     digitalWrite(MOSI, LOW);
 }
 
+// Converting linear volume level to near logarithmic pot value
 uint8_t getPotValueFromVolumeLevel(uint8_t volume)
 {
-    return (volume * 255) / 100;
+    volume = (volume * 255)/100;            // Scaling 0-100 range to 0-255
+    float value = volume * 0.25;            // Setting value before half volume
+    if(volume > 127)
+        value = volume * 2 - value - 191;   // Setting value after half volume
+    return value;
 }
 
 void MCP42010::setWiper(uint8_t pot, uint8_t volume)
