@@ -15,7 +15,7 @@ MCP42010::MCP42010(int CS, int SCK, int MOSI)
     digitalWrite(SCK, LOW);
     pinMode(MOSI, OUTPUT);
     digitalWrite(MOSI, LOW);
-    setWiper(0, 0);
+    setWiper(BothCh, 0);
 }
 
 void MCP42010::SPIWrite(uint8_t data)
