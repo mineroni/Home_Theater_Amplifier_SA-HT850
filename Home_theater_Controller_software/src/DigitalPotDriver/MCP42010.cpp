@@ -30,8 +30,14 @@ void MCP42010::SPIWrite(uint8_t data)
     digitalWrite(MOSI, LOW);
 }
 
-void MCP42010::setWiper(uint8_t pot, uint8_t value)
+uint8_t getPotValueFromVolumeLevel(uint8_t volume)
 {
+    return (volume * 255) / 100;
+}
+
+void MCP42010::setWiper(uint8_t pot, uint8_t volume)
+{
+    uint8_t value = getPotValueFromVolumeLevel(volume);
     digitalWrite(CS, LOW);
     SPIWrite(pot);
     SPIWrite(value);

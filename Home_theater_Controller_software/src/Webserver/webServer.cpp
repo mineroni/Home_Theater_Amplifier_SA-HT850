@@ -46,7 +46,7 @@ void handleAddOffsetSurround() {
         volume.changeSurroundOffset(server.arg("offset").toInt());
     }
     volume.printVolumeStatus();
-    surroundVolume.setWiper(MCP42010::WriteDeviceSelect::BothCh, volume.getSurroundVolume()*255/100);
+    surroundVolume.setWiper(MCP42010::WriteDeviceSelect::BothCh, volume.getSurroundVolume());
     server.send(200, "application/json", generateResponseMessage());
 }
 
@@ -56,7 +56,7 @@ void handleAddOffsetSubwoofer() {
         volume.changeSubOffset(server.arg("offset").toInt());
     }
     volume.printVolumeStatus();
-    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch1, volume.getSubVolume()*255/100);
+    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch1, volume.getSubVolume());
     server.send(200, "application/json", generateResponseMessage());
 }
 
@@ -66,7 +66,7 @@ void handleAddOffsetCenter() {
         volume.changeCenterOffset(server.arg("offset").toInt());
     }
     volume.printVolumeStatus();
-    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch0, volume.getCenterVolume()*255/100);
+    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch0, volume.getCenterVolume());
     server.send(200, "application/json", generateResponseMessage());
 }
 

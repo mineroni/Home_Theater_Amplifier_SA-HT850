@@ -97,10 +97,10 @@ extern MCP42010 subCentVolume;
 
 inline void setAllVolumeLevel()
 {
-    frontVolume.setWiper(MCP42010::WriteDeviceSelect::BothCh, volume.getVolume()*255/100);
-    surroundVolume.setWiper(MCP42010::WriteDeviceSelect::BothCh, volume.getSurroundVolume()*255/100);
-    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch0, volume.getCenterVolume()*255/100);
-    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch1, volume.getSubVolume()*255/100);
+    frontVolume.setWiper(MCP42010::WriteDeviceSelect::BothCh, volume.getVolume());
+    surroundVolume.setWiper(MCP42010::WriteDeviceSelect::BothCh, volume.getSurroundVolume());
+    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch0, volume.getCenterVolume());
+    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch1, volume.getSubVolume());
 }
 
 #endif // MAIN_H
