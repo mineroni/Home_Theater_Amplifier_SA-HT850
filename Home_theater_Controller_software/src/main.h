@@ -7,7 +7,7 @@
 #include "VolumeController/Volume.h"
 #include "DigitalPotDriver/MCP42010.h"
 
-//#define DEBUG
+#define DEBUG
 
 
 // ======================== Defining output pins =======================
@@ -99,8 +99,8 @@ inline void setAllVolumeLevel()
 {
     frontVolume.setWiper(MCP42010::WriteDeviceSelect::BothCh, volume.getVolume()*255/100);
     surroundVolume.setWiper(MCP42010::WriteDeviceSelect::BothCh, volume.getSurroundVolume()*255/100);
-    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch0, volume.getSubVolume()*255/100);
-    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch1, volume.getCenterVolume()*255/100);
+    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch0, volume.getCenterVolume()*255/100);
+    subCentVolume.setWiper(MCP42010::WriteDeviceSelect::Ch1, volume.getSubVolume()*255/100);
 }
 
 #endif // MAIN_H
