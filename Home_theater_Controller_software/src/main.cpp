@@ -52,6 +52,10 @@ void setup()
   Print("IP address: ");
   Println(WiFi.localIP());
 
+  // Waiting for the power lines to initialize
+  while (millis() < 3000)
+    yield();  
+
   // Setting initial volume level
   setAllVolumeLevel();
 
