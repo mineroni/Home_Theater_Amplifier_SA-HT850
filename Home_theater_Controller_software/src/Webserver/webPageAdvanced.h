@@ -123,7 +123,7 @@ const char * advancedPage = R"rawliteral(
             mutedStatus.style.visibility = data.muted ? 'visible' : 'hidden';
 
             surroundFill.style.width = `${(data.surround_offset+10)*5}%`;
-            surroundText.textContent = `Subwoofer offset: ${data.surround_offset}`;
+            surroundText.textContent = `Surround offset: ${data.surround_offset}`;
 
             subwooferFill.style.width = `${(data.subwoofer_offset+10)*5}%`;
             subwooferText.textContent = `Subwoofer offset: ${data.subwoofer_offset}`;
