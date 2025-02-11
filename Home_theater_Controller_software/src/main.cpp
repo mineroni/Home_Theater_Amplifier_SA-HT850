@@ -31,6 +31,13 @@ void setup()
   // Initializing IR
   initIR();
 
+  // Initializing pins
+  pinMode(WiFiLed, OUTPUT);
+  pinMode(IRLed, OUTPUT);
+  pinMode(standbyButton, INPUT_PULLUP);
+  digitalWrite(WiFiLed, LOW);
+  digitalWrite(IRLed, LOW);
+
   // Setting up WiFi
   WiFi.begin(WIFI_SSID, WIFI_PASSWD);
   while (WiFi.waitForConnectResult() != WL_CONNECTED) 
@@ -39,6 +46,7 @@ void setup()
     delay(5000);
     ESP.restart();
   }
+  digitalWrite(WiFiLed, HIGH); // ESP is connected to WiFi
 
   // Setting up OTA
   ArduinoOTA.begin();
@@ -68,6 +76,8 @@ void loop()
 
   server.handleClient();
 
+  digitalWrite(WiFiLed, WiFi.status() == WL_CONNECTED ? HIGH : LOW);
+
   yield();
 }
 
@@ -79,6 +89,8 @@ void handleIRCommand()
     return;
   }
 
+  digitalWrite(IRLed, LOW);
+
   switch (handleIR())
   {
     case IR_Mute:
@@ -87,6 +99,7 @@ void handleIRCommand()
       volume.mute();
       volume.printVolumeStatus();
       setAllVolumeLevel();
+      digitalWrite(IRLed, HIGH);
       break;
 
     case IR_VolumeUp:
@@ -95,6 +108,7 @@ void handleIRCommand()
       volume.changeVolume(volumeChangeStep);
       volume.printVolumeStatus();
       setAllVolumeLevel();
+      digitalWrite(IRLed, HIGH);
       break;
 
     case IR_VolumeDown:
@@ -103,17 +117,20 @@ void handleIRCommand()
       volume.changeVolume(-volumeChangeStep);
       volume.printVolumeStatus();
       setAllVolumeLevel();
+      digitalWrite(IRLed, HIGH);
       break;
 
     case IR_Source:
       Println("Source select");
       lastIRTime = millis();
+      digitalWrite(IRLed, HIGH);
       break;
 
     case IR_UNKNOWN:
       Println("Unknown command:");
       Print(resultToHumanReadableBasic(&results));
       Print(resultToSourceCode(&results));
+      digitalWrite(IRLed, HIGH);
       break;
 
     default: // Probably IR_NOOP

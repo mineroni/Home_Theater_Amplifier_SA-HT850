@@ -17,16 +17,19 @@ const uint8_t SPI_MOSI = 14;
 const uint8_t SPI_CS0 = 2;
 const uint8_t SPI_CS1 = 0;
 const uint8_t SPI_CS2 = 4;
+const uint8_t WiFiLed = 16;
+const uint8_t IRLed = 15;
+const uint8_t standbyButton = 5;
 
 // ==================== start of TUNEABLE PARAMETERS ====================
+// IR receiver pin
+const uint16_t kRecvPin = 13;
+
 // IR Volume change step
 const uint8_t volumeChangeStep = 5;
 
 // Delay in ms between IR captures
 const uint16_t captureDelayIR = 200;
-
-// IR receiver pin
-const uint16_t kRecvPin = 13;
 
 // As this program is a special purpose capture/decoder, let us use a larger
 // than normal buffer so we can handle Air Conditioner remote codes.
